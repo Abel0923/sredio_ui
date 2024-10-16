@@ -6,8 +6,37 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-alpine.css"
+  />
+
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/ag-grid-community@32.2.2/styles/ag-grid.css" />
+
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@ag-grid-community/styles@32.2.2/ag-grid.css" />
+
+  <script src="//https://cdn.jsdelivr.net/npm/browse/ag-grid-community@32.2.2/dist/ag-grid-community.min.js"></script>
+    <!-- Style added after AG Grid bundle -->
+    <style>
+        .ag-theme-alpine {
+            --ag-foreground-color: deeppink;
+            --ag-header-column-separator-color: orange;
+         }
+    </style>
 </head>
-<body>
+<body class="mat-typography">
   <app-root></app-root>
 </body>
 </html>

@@ -1,1 +1,31 @@
 /* You can add global styles to this file, and also import other style files */
+@use "ag-grid-community/styles" as ag;
+@use '@angular/material' as mat;
+@include ag.grid-styles();
+@import '../node_modules/ag-grid-community/styles/ag-grid.css';
+@import '../node_modules/ag-grid-community/styles/ag-theme-alpine.css';
+@import url('https://unpkg.com/ag-grid-community@28.2.0/styles/ag-grid.css');
+
+@import url('https://unpkg.com/ag-grid-community@28.2.0/styles/ag-theme-alpine.css');
+
+
+// Define your custom theme colors
+$my-primary: mat.define-palette(mat.$indigo-palette);
+$my-accent: mat.define-palette(mat.$pink-palette);
+$my-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme
+$my-theme: mat.define-light-theme((
+  color: (
+    primary: $my-primary,
+    accent: $my-accent,
+    warn: $my-warn,
+  )
+));
+
+// Include the theme and Angular Material core styles
+@include mat.core();
+@include mat.all-component-themes($my-theme);
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

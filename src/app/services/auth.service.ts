@@ -36,14 +36,14 @@ export class AuthService {
     });
   }
 
-  public getAllOrgRepo(accessToken: string, org_name: string): Observable<any>{
-    return this.httpClient.get(this.apiUrl+'/org/repo?org_name='+org_name, {
+  public getAllOrgRepo(accessToken: string, org_name: string, page: number, page_size: number): Observable<any>{
+    return this.httpClient.get(this.apiUrl+'/org/repo?org_name='+org_name+'&page='+page+'&page_size='+page_size, {
       headers: { Authorization: `token ${accessToken}` },
     });
   }
 
-  public getRepoStats(accessToken: string, org_name: string, repo_name: string): Observable<any>{
-    return this.httpClient.get(this.apiUrl+'/org/repo/stats?org_name='+org_name+'&&repo_name='+repo_name, {
+  public getRepoStats(accessToken: string, org_name: string, repos: any, page: number, page_size: number): Observable<any>{
+    return this.httpClient.post(this.apiUrl+'/org/repo/stats?org_name='+org_name+'&page='+page+'&page_size='+page_size, {repos}, {
       headers: { Authorization: `token ${accessToken}` },
     });
   }

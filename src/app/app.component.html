@@ -55,13 +55,13 @@
       </div>
     </div>
 
-  <div *ngIf="userData" style="display: flex; flex-direction: column; margin-top: 10%; width: 50%;">
+  <div *ngIf="userData" style="display: flex; flex-direction: column; margin-top: 6%; width: 56%;">
     <div style="display: flex; justify-content: space-around;">
       <div style="display: flex; flex-direction: column;">
         <h2 style="font-weight: bolder; color: blueviolet;">Github Projects</h2>
         <mat-form-field>
           <mat-label>Select Organization</mat-label>
-          <mat-select [(value)]="selectedOrg" (selectionChange)="getAllOrgRepo($event)">
+          <mat-select [(value)]="selectedOrg" (selectionChange)="getAllOrgRepo()">
             <div *ngFor="let item of orgData">
               <mat-option [value]="item.login">{{item?.login}}</mat-option>
             </div>
@@ -75,30 +75,59 @@
         <p>Loading...</p>
       </div>
 
-      <div class="grid-container" *ngIf="selectedOrg">
+      <div class="ag-theme-alpine" style="width: 100%; height: 500px;" *ngIf="selectedOrg">
+        <br/>
         <h1 class="grid-title">{{ selectedOrg + " Repositories"}}</h1>
+        <mat-divider></mat-divider><br/>
         <ag-grid-angular
-          style="width: 60vw; height: 300px;"
-          class="ag-theme-balham grid-no-border"
+          style="height: 300px;"
+          class="ag-theme-quartz"
           [columnDefs]="columnRepoDefs"
           [rowData]="rowRepoData"
+          (gridReady)="onGridReady($event)"
+          [resetRowDataOnUpdate]="true"
           rowSelection="multiple"
-          (rowClicked)="getRepoStats($event)"
+          [rowMultiSelectWithClick]="false"
+          (selectionChanged)="setSelectedRepos($event)"
+          [suppressRowClickSelection]="loading"
+          [overlayLoadingTemplate]="'<span>Loading...</span>'"
+          [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+          [enableBrowserTooltips]="true"
+          [pagination]="true"
+          [paginationPageSize]="page_size_repo"
+          (paginationChanged)="getAllOrgRepoByPage($event)"
+          [paginationAutoPageSize]="false"
+          [suppressAggFuncInHeader]="true"
+          >
+        </ag-grid-angular>
+      </div>
+      <div *ngIf="selectedRepo.length >= 1" style="display: flex; justify-content: flex-end; ">
+        <button mat-button (click)="getRepoStats()" style="background-color: blueviolet;">Fetch Repo - Stats</button>
+      </div>
+
+
+      <div class="grid-container" *ngIf="!this.loading && rowStatsData.length > 0">
+        <ag-grid-angular
+          style="width: 52vw; height: 300px;"
+          class="ag-theme-quartz"
+          [overlayLoadingTemplate]="'<span>Loading...</span>'"
+          [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+          [columnDefs]="columnStatsDefs"
+          [rowData]="rowStatsData"
+
+          (gridReady)="onGridReadyStats($event)"
+          [resetRowDataOnUpdate]="true"
+          rowSelection="multiple"
           [rowMultiSelectWithClick]="false"
           [suppressRowClickSelection]="loading"
           [overlayLoadingTemplate]="'<span>Loading...</span>'"
           [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
-          [enableBrowserTooltips]="true">
-        </ag-grid-angular>
-      </div>
-
-      <div class="grid-container" *ngIf="selectedRepo">
-        <h1 class="grid-title">{{ selectedRepo?.name + " Stats"}}</h1>
-        <ag-grid-angular
-          style="width: 60vw; height: 300px;"
-          class="ag-theme-balham grid-no-border"
-          [columnDefs]="columnStatsDefs"
-          [rowData]="rowStatsData">
+          [enableBrowserTooltips]="true"
+          [pagination]="true"
+          [paginationPageSize]="page_size_repo_stats"
+          (paginationChanged)="getAllOrgRepoStatsByPage($event)"
+          [paginationAutoPageSize]="false"
+          [suppressAggFuncInHeader]="true">
         </ag-grid-angular>
       </div>
 
@@ -107,5 +136,6 @@
   </div>
   </mat-expansion-panel>
 </mat-accordion>
+
 
 

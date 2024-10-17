@@ -8,6 +8,16 @@
 
 @import url('https://unpkg.com/ag-grid-community@28.2.0/styles/ag-theme-alpine.css');
 
+@import '../node_modules/ag-grid-community/styles/ag-grid.css';
+@import '../node_modules/ag-grid-community/styles/ag-theme-alpine.css';
+
+
+@import '../node_modules/ag-grid-community/styles/agGridMaterialFont.css';
+
+:root {
+  --ag-icon-font-family: agGridMaterial;
+}
+
 
 // Define your custom theme colors
 $my-primary: mat.define-palette(mat.$indigo-palette);

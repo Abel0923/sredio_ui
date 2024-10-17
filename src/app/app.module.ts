@@ -11,6 +11,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSnackBarModule  } from '@angular/material/snack-bar'
 import { MatSelectModule  } from '@angular/material/select'
 import { AgGridModule } from 'ag-grid-angular';
+import {MatDividerModule} from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { AgGridModule } from 'ag-grid-angular';
   imports: [
     BrowserModule,
     MatExpansionModule,
+    MatDividerModule,
     MatSnackBarModule,
     AppRoutingModule,
     MatSelectModule,
@@ -26,7 +28,8 @@ import { AgGridModule } from 'ag-grid-angular';
     MatButtonModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    AgGridModule
+    AgGridModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

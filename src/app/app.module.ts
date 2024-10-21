@@ -12,6 +12,7 @@ import { MatSnackBarModule  } from '@angular/material/snack-bar'
 import { MatSelectModule  } from '@angular/material/select'
 import { AgGridModule } from 'ag-grid-angular';
 import {MatDividerModule} from '@angular/material/divider';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -27,8 +28,10 @@ import {MatDividerModule} from '@angular/material/divider';
     MatIconModule,
     MatButtonModule,
     HttpClientModule,
+    MatTabsModule,
     BrowserAnimationsModule,
     AgGridModule,
+
 
   ],
   providers: [],

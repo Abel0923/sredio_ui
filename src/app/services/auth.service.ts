@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
 
-  private authUrl = 'http://localhost:3000/auth'; // Change to your server URL
-  private apiUrl = 'http://localhost:3000/user'; // Change to your server URL
+  private authUrl = 'http://localhost:3000/api/auth';
+  private apiUrl = 'http://localhost:3000/api';
 
   constructor(private httpClient: HttpClient) {
   }
@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   public getOrg(accessToken: string): Observable<any>{
-    return this.httpClient.get(this.apiUrl+'/org', {
+    return this.httpClient.get(this.apiUrl+'/org/', {
       headers: { Authorization: `token ${accessToken}` },
     });
   }
@@ -43,10 +43,27 @@ export class AuthService {
   }
 
   public getRepoStats(accessToken: string, org_name: string, repos: any, page: number, page_size: number): Observable<any>{
-    return this.httpClient.post(this.apiUrl+'/org/repo/stats?org_name='+org_name+'&page='+page+'&page_size='+page_size, {repos}, {
+    return this.httpClient.post(this.apiUrl+'/repo/stats?org_name='+org_name+'&page='+page+'&page_size='+page_size, {repos}, {
       headers: { Authorization: `token ${accessToken}` },
     });
   }
 
+  public getRepoCommits(accessToken: string, org_name: string, repos: any, page: number, page_size: number): Observable<any>{
+    return this.httpClient.post(this.apiUrl+'/repo/commits?org_name='+org_name+'&page='+page+'&page_size='+page_size, {repos}, {
+      headers: { Authorization: `token ${accessToken}` },
+    });
+  }
+
+  public getRepoPR(accessToken: string, org_name: string, repos: any, page: number, page_size: number): Observable<any>{
+    return this.httpClient.post(this.apiUrl+'/repo/pr?org_name='+org_name+'&page='+page+'&page_size='+page_size, {repos},{
+      headers: { Authorization: `token ${accessToken}` },
+    });
+  }
+
+  public getRepoIssues(accessToken: string, org_name: string, repos: any, page: number, page_size: number): Observable<any>{
+    return this.httpClient.post(this.apiUrl+'/repo/issues?org_name='+org_name+'&page='+page+'&page_size='+page_size, {repos}, {
+      headers: { Authorization: `token ${accessToken}` },
+    });
+  }
 
 }

@@ -77,60 +77,155 @@
 
       <div class="ag-theme-alpine" style="width: 100%; height: 500px;" *ngIf="selectedOrg">
         <br/>
-        <h1 class="grid-title">{{ selectedOrg + " Repositories"}}</h1>
+        <div style="display: flex; justify-content: space-between;">
+          <h1 class="grid-title">{{ selectedOrg + " Repositories"}}</h1>
+          <div style="display: flex; justify-content: flex-end; ">
+            <button mat-button [disabled]="selectedRepo.length < 1" (click)="getRepoStats()" style="background-color: blueviolet;">Fetch Repo - Stats</button>
+          </div>
+        </div>
         <mat-divider></mat-divider><br/>
         <ag-grid-angular
           style="height: 300px;"
           class="ag-theme-quartz"
-          [columnDefs]="columnRepoDefs"
-          [rowData]="rowRepoData"
-          (gridReady)="onGridReady($event)"
-          [resetRowDataOnUpdate]="true"
-          rowSelection="multiple"
-          [rowMultiSelectWithClick]="false"
-          (selectionChanged)="setSelectedRepos($event)"
           [suppressRowClickSelection]="loading"
           [overlayLoadingTemplate]="'<span>Loading...</span>'"
           [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
-          [enableBrowserTooltips]="true"
+
+
+          [columnDefs]="columnRepoDefs"
+          [defaultColDef]="defaultColDef"
+          [rowData]="rowRepoData"
+          [paginationPageSizeSelector]="paginationPageSizeSelector "
+
+          (gridReady)="onGridReady($event)"
+          (selectionChanged)="setSelectedRepos($event)"
+          [gridOptions]=""
+
           [pagination]="true"
           [paginationPageSize]="page_size_repo"
           (paginationChanged)="getAllOrgRepoByPage($event)"
           [paginationAutoPageSize]="false"
-          [suppressAggFuncInHeader]="true"
-          >
-        </ag-grid-angular>
-      </div>
-      <div *ngIf="selectedRepo.length >= 1" style="display: flex; justify-content: flex-end; ">
-        <button mat-button (click)="getRepoStats()" style="background-color: blueviolet;">Fetch Repo - Stats</button>
-      </div>
+          [paginationPageSize]="paginationPageSize"
 
-
-      <div class="grid-container" *ngIf="!this.loading && rowStatsData.length > 0">
-        <ag-grid-angular
-          style="width: 52vw; height: 300px;"
-          class="ag-theme-quartz"
-          [overlayLoadingTemplate]="'<span>Loading...</span>'"
-          [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
-          [columnDefs]="columnStatsDefs"
-          [rowData]="rowStatsData"
-
-          (gridReady)="onGridReadyStats($event)"
           [resetRowDataOnUpdate]="true"
           rowSelection="multiple"
           [rowMultiSelectWithClick]="false"
-          [suppressRowClickSelection]="loading"
-          [overlayLoadingTemplate]="'<span>Loading...</span>'"
-          [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
-          [enableBrowserTooltips]="true"
-          [pagination]="true"
-          [paginationPageSize]="page_size_repo_stats"
-          (paginationChanged)="getAllOrgRepoStatsByPage($event)"
-          [paginationAutoPageSize]="false"
-          [suppressAggFuncInHeader]="true">
+
+          [suppressAggFuncInHeader]="true"
+          [suppressDragLeaveHidesColumns]="true"
+          >
         </ag-grid-angular>
       </div>
 
+
+
+      <div style="display: flex; flex-direction: column;">
+
+        <div class="grid-container" *ngIf=" rowStatsData.length > 0">
+          <ag-grid-angular
+            style="width: 52vw; height: 300px;"
+            class="ag-theme-quartz"
+            [overlayLoadingTemplate]="'<span>Loading...</span>'"
+            [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+            [columnDefs]="columnStatsDefs"
+            [defaultColDef]="defaultColDef"
+            [rowData]="rowStatsData"
+            (gridReady)="onGridReadyStats($event)"
+            [resetRowDataOnUpdate]="true"
+            rowSelection="multiple"
+            [rowMultiSelectWithClick]="false"
+            [suppressRowClickSelection]="loading"
+            [overlayLoadingTemplate]="'<span>Loading...</span>'"
+            [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+            [enableBrowserTooltips]="true"
+            [pagination]="true"
+            [paginationPageSize]="page_size_repo_stats"
+            (paginationChanged)="getAllOrgRepoStatsByPage($event, 'repo')"
+            [paginationAutoPageSize]="false"
+            [suppressAggFuncInHeader]="true">
+          </ag-grid-angular>
+        </div>
+
+        <div class="grid-container" *ngIf="rowCommitData.length > 0">
+        <i class="grid-title">Commits</i>
+          <ag-grid-angular
+            style="width: 52vw; height: 300px;"
+            class="ag-theme-quartz"
+            [overlayLoadingTemplate]="'<span>Loading...</span>'"
+            [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+            [columnDefs]="columnCommitDefs"
+            [defaultColDef]="defaultColDef"
+            [rowData]="rowCommitData"
+            (gridReady)="onGridReadyStats($event)"
+            [resetRowDataOnUpdate]="true"
+            rowSelection="multiple"
+            [rowMultiSelectWithClick]="false"
+            [suppressRowClickSelection]="loading"
+            [overlayLoadingTemplate]="'<span>Loading...</span>'"
+            [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+            [enableBrowserTooltips]="true"
+            [pagination]="true"
+            [paginationPageSize]="page_size_repo_stats"
+            (paginationChanged)="getAllOrgRepoStatsByPage($event, 'commit')"
+            [paginationAutoPageSize]="false"
+            [suppressAggFuncInHeader]="true">
+          </ag-grid-angular>
+        </div>
+
+        <div class="grid-container" *ngIf="rowPRData.length > 0">
+        <i class="grid-title">Pull Request</i>
+
+          <ag-grid-angular
+            style="width: 52vw; height: 300px;"
+            class="ag-theme-quartz"
+            [overlayLoadingTemplate]="'<span>Loading...</span>'"
+            [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+            [columnDefs]="columnPRDefs"
+            [defaultColDef]="defaultColDef"
+            [rowData]="rowPRData"
+            (gridReady)="onGridReadyStats($event)"
+            [resetRowDataOnUpdate]="true"
+            rowSelection="multiple"
+            [rowMultiSelectWithClick]="false"
+            [suppressRowClickSelection]="loading"
+            [overlayLoadingTemplate]="'<span>Loading...</span>'"
+            [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+            [enableBrowserTooltips]="true"
+            [pagination]="true"
+            [paginationPageSize]="page_size_repo_stats"
+            (paginationChanged)="getAllOrgRepoStatsByPage($event, 'pr')"
+            [paginationAutoPageSize]="false"
+            [suppressAggFuncInHeader]="true">
+          </ag-grid-angular>
+        </div>
+
+        <div class="grid-container" *ngIf="rowIssueData.length > 0">
+        <i class="grid-title">Issues</i>
+
+          <ag-grid-angular
+            style="width: 52vw; height: 300px;"
+            class="ag-theme-quartz"
+            [overlayLoadingTemplate]="'<span>Loading...</span>'"
+            [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+            [columnDefs]="columnIssueDefs"
+            [defaultColDef]="defaultColDef"
+            [rowData]="rowIssueData"
+            (gridReady)="onGridReadyStats($event)"
+            [resetRowDataOnUpdate]="true"
+            rowSelection="multiple"
+            [rowMultiSelectWithClick]="false"
+            [suppressRowClickSelection]="loading"
+            [overlayLoadingTemplate]="'<span>Loading...</span>'"
+            [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+            [enableBrowserTooltips]="true"
+            [pagination]="true"
+            [paginationPageSize]="page_size_repo_stats"
+            (paginationChanged)="getAllOrgRepoStatsByPage($event, 'issue')"
+            [paginationAutoPageSize]="false"
+            [suppressAggFuncInHeader]="true">
+          </ag-grid-angular>
+        </div>
+      </div>
     </div>
 
   </div>

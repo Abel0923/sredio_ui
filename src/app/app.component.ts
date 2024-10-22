@@ -142,7 +142,7 @@ export class AppComponent {
   }
 
   connectToGithub(){
-    window.location.href = 'http://localhost:3000/auth/github';
+    window.location.href = 'http://localhost:3000/api/auth/github';
   }
 
   removeToGithub(){

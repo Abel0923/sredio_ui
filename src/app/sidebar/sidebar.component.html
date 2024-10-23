@@ -1,56 +1,96 @@
 <div class="sidenav-body-container">
   <div class="sidenav-body">
-    <h1>Sredio app</h1>
+    <h3 style="font-weight: bold;">Sredio app Logo</h3>
 
-    <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
-      <mat-expansion-panel-header style="display: flex;">
-        <mat-panel-title style="display: flex; justify-content: left;  min-height: 4rem;">
-          <h2>Project</h2>
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <app-sidebar-link routerLink="/dashboard">
-        <mat-icon icon>timeline</mat-icon>
-        Timeline
-      </app-sidebar-link>
+    <div>
+    <h2 class="nav_menu_title">PLANING</h2>
+    <mat-accordion>
+      <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)" style="width: 100%;">
+        <mat-expansion-panel-header style="display: flex;">
+          <mat-panel-title style="display: flex; font-size: medium; font-weight: bold;">
+            <h2 class="nab_sub_menu_title">Project Name</h2>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
 
-      <app-sidebar-link routerLink="/">
-        <mat-icon icon>view_kanban</mat-icon>
-        Kanbana board
-      </app-sidebar-link>
+        <div style="display: flex; width: 100%; flex: 1; flex-direction: column;">
+          <app-sidebar-link routerLink="/">
+            <mat-icon icon>timeline</mat-icon>
+            Timeline
+          </app-sidebar-link>
 
-      <app-sidebar-link routerLink="/">
-        <mat-icon icon>trending_up</mat-icon>
-        Reports
-      </app-sidebar-link>
-    </mat-expansion-panel>
+          <app-sidebar-link routerLink="#">
+            <mat-icon icon>view_kanban</mat-icon>
+            Kanbana board
+          </app-sidebar-link>
 
+          <app-sidebar-link routerLink="#">
+            <mat-icon icon>trending_up</mat-icon>
+            Reports
+          </app-sidebar-link>
+        </div>
 
-    <app-sidebar-link routerLink="/">
+      </mat-expansion-panel>
+
+    </mat-accordion>
+
+    <app-sidebar-link routerLink="#">
       <mat-icon icon>summarize</mat-icon>
-
       Issues
     </app-sidebar-link>
-
-    <app-sidebar-link routerLink="/">
-      <mat-icon icon>widget_small</mat-icon>
-
+    <app-sidebar-link routerLink="#">
+      <mat-icon icon>token_add</mat-icon>
       Components
     </app-sidebar-link>
+
+  </div>
+
+    <mat-divider style="margin: 1rem;"></mat-divider>
+
+    <div>
+      <h2 class="nav_menu_title">DEVELOPMENT</h2>
+      <app-sidebar-link routerLink="#">
+        <mat-icon icon>code</mat-icon>
+        Code
+      </app-sidebar-link>
+      <app-sidebar-link routerLink="#">
+        <mat-icon icon>new_releases</mat-icon>
+        Release
+      </app-sidebar-link>
+    </div>
+
+    <mat-divider style="margin: 1rem;"></mat-divider>
+
+    <div>
+      <app-sidebar-link routerLink="#">
+        <mat-icon icon>description</mat-icon>
+        Project Page
+      </app-sidebar-link>
+      <app-sidebar-link routerLink="#">
+        <mat-icon icon>article_shortcut</mat-icon>
+        Add Shortcut
+      </app-sidebar-link>
+
+      <app-sidebar-link routerLink="#">
+        <mat-icon icon>settings</mat-icon>
+        Project Setting
+      </app-sidebar-link>
+    </div>
   </div>
 </div>
+
 
 <div
   class="resize-handle"
   (mousedown)="startResizing($event)"
-  [class.resizing]="resizingEvent.isResizing"
->
-  <mat-icon icon>chevron_right</mat-icon>
+  [class.resizing]="resizingEvent.isResizing">
 
+  <mat-icon icon>chevron_right</mat-icon>
 </div>
+
 <button
   class="toggle-button"
   (click)="this.sidebarService.toggleSidenav()"
-  [class.is-flipped]="sidebarService.isExpanded"
->
+  [class.is-flipped]="sidebarService.isExpanded">
+
   <mat-icon style="color:blue;" icon>chevron_right</mat-icon>
 </button>

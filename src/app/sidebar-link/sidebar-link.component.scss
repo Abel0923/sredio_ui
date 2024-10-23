@@ -9,7 +9,7 @@ a {
 
   box-sizing: border-box;
 
-  padding: 16px;
+  padding: 8px;
 
   // 32px is just a bit of a margin to make sure the link is smaller than the sidenav
   min-width: calc(var(--min-expanded-sidenav-width) - 32px);

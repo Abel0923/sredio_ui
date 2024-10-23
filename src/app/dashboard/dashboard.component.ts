@@ -1,22 +1,24 @@
+
+
 import {Component,inject, signal} from '@angular/core';
-import { AuthService } from './services/auth.service';
+import { AuthService } from '../services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {
+
   GridApi,
   GridReadyEvent,
+
 } from "ag-grid-community";
-import { SidebarService } from './services/sidebar.service';
 
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
-export class AppComponent {
-  title = 'sredio_project';
+export class DashboardComponent {
   panelOpenState = signal(false);
   token: any = null
   userData: any
@@ -95,7 +97,7 @@ export class AppComponent {
 
 
 
-  constructor(private authService: AuthService, private route: ActivatedRoute, public sidebarService: SidebarService){
+  constructor(private authService: AuthService, private route: ActivatedRoute){
 
   }
 

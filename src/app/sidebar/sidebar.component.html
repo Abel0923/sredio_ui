@@ -1,0 +1,56 @@
+<div class="sidenav-body-container">
+  <div class="sidenav-body">
+    <h1>Sredio app</h1>
+
+    <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+      <mat-expansion-panel-header style="display: flex;">
+        <mat-panel-title style="display: flex; justify-content: left;  min-height: 4rem;">
+          <h2>Project</h2>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-sidebar-link routerLink="/dashboard">
+        <mat-icon icon>timeline</mat-icon>
+        Timeline
+      </app-sidebar-link>
+
+      <app-sidebar-link routerLink="/">
+        <mat-icon icon>view_kanban</mat-icon>
+        Kanbana board
+      </app-sidebar-link>
+
+      <app-sidebar-link routerLink="/">
+        <mat-icon icon>trending_up</mat-icon>
+        Reports
+      </app-sidebar-link>
+    </mat-expansion-panel>
+
+
+    <app-sidebar-link routerLink="/">
+      <mat-icon icon>summarize</mat-icon>
+
+      Issues
+    </app-sidebar-link>
+
+    <app-sidebar-link routerLink="/">
+      <mat-icon icon>widget_small</mat-icon>
+
+      Components
+    </app-sidebar-link>
+  </div>
+</div>
+
+<div
+  class="resize-handle"
+  (mousedown)="startResizing($event)"
+  [class.resizing]="resizingEvent.isResizing"
+>
+  <mat-icon icon>chevron_right</mat-icon>
+
+</div>
+<button
+  class="toggle-button"
+  (click)="this.sidebarService.toggleSidenav()"
+  [class.is-flipped]="sidebarService.isExpanded"
+>
+  <mat-icon style="color:blue;" icon>chevron_right</mat-icon>
+</button>

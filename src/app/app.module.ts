@@ -13,10 +13,19 @@ import { MatSelectModule  } from '@angular/material/select'
 import { AgGridModule } from 'ag-grid-angular';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatTabsModule} from '@angular/material/tabs';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { SidebarLinkComponent } from './sidebar-link/sidebar-link.component';
+
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SidebarComponent,
+    SidebarLinkComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +40,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatTabsModule,
     BrowserAnimationsModule,
     AgGridModule,
-
+    MatSidenavModule,
+    MatListModule
 
   ],
   providers: [],

@@ -1,0 +1,241 @@
+<style>
+  .loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  .grid-container {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .grid-title {
+    margin-bottom: 10px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+</style>
+
+<mat-accordion>
+  <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+    <mat-expansion-panel-header>
+      <mat-panel-title style="display: flex; justify-content: left;  min-height: 4rem;">
+        <img src="/assets/github_icon.png" style="height: 4rem;"/>
+        <mat-icon *ngIf="userData">done_all</mat-icon>
+      </mat-panel-title>
+
+      <div *ngIf="userData" style="display: flex;">
+      <mat-panel-description  style="display: flex; justify-content: center;">
+        Welcome {{userData?.displayName}}
+      </mat-panel-description>
+
+
+      <mat-panel-description  style="display: flex; justify-content: center;">
+        <span>Last Synced: {{getDate(userData?.connectedAt)}}</span>
+        <span>Sync Type: full</span>
+      </mat-panel-description>
+    </div>
+    </mat-expansion-panel-header>
+
+    <div style="display: flex; justify-content: center;">
+      <div *ngIf="!userData" style="display: flex; width: 25rem; flex-direction: column; align-items: center; justify-content: center;">
+        <button mat-raised-button (click)="connectToGithub()">connect</button>
+        <span>{{userData}}</span>
+        <span>Connect Sredio to Github</span>
+      </div>
+
+      <div *ngIf="userData" style="display: flex; justify-content: flex-end; align-items: end;">
+        <button mat-button (click)="removeToGithub()">Remove</button>
+      </div>
+    </div>
+
+    <mat-panel-description  style="display: flex; justify-content: center;">
+
+    <div *ngIf="userData" style="display: flex; align-items: center;  flex: 1; width: 70vw;  flex-direction: column;">
+      <!-- <div *ngIf="userData" style="display: flex; flex-direction: column; margin-top: 6%; width: 75%; border: 1px solid red; justify-content: center; align-items: center;"> -->
+      <div style="display: flex; justify-content: space-around; flex: 1;">
+        <div style="display: flex; flex-direction: column;">
+          <h2 style="font-weight: bolder; color: blueviolet;">Github Projects</h2>
+          <mat-form-field>
+            <mat-label>Select Organization</mat-label>
+            <mat-select [(value)]="selectedOrg" (selectionChange)="getAllOrgRepo()">
+              <div *ngFor="let item of orgData">
+                <mat-option [value]="item.login">{{item?.login}}</mat-option>
+              </div>
+            </mat-select>
+          </mat-form-field>
+          <span>Please select organization, you want to connect</span>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column;">
+        <div *ngIf="loading" class="loading-overlay">
+          <p>Loading...</p>
+        </div>
+
+        <div class="ag-theme-alpine" style="width: 100%; height: 500px;" *ngIf="selectedOrg">
+          <br/>
+          <div style="display: flex; justify-content: space-between;">
+            <h1 class="grid-title">{{ selectedOrg + " Repositories"}}</h1>
+            <div style="display: flex; justify-content: flex-end; ">
+              <button mat-button [disabled]="selectedRepo.length < 1" (click)="getRepoStats()" style="background-color: blueviolet;">Fetch Repo - Stats</button>
+            </div>
+          </div>
+          <mat-divider></mat-divider><br/>
+          <ag-grid-angular
+            style="width: 52vw; height: 300px;"
+            class="ag-theme-quartz"
+            [suppressRowClickSelection]="loading"
+            [overlayLoadingTemplate]="'<span>Loading...</span>'"
+            [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+
+
+            [columnDefs]="columnRepoDefs"
+            [defaultColDef]="defaultColDef"
+            [rowData]="rowRepoData"
+            [paginationPageSizeSelector]="paginationPageSizeSelector "
+
+            (gridReady)="onGridReady($event)"
+            (selectionChanged)="setSelectedRepos($event)"
+            [gridOptions]=""
+
+            [pagination]="true"
+            [paginationPageSize]="page_size_repo"
+            (paginationChanged)="getAllOrgRepoByPage($event)"
+            [paginationAutoPageSize]="false"
+            [paginationPageSize]="paginationPageSize"
+
+            [resetRowDataOnUpdate]="true"
+            rowSelection="multiple"
+            [rowMultiSelectWithClick]="false"
+
+            [suppressAggFuncInHeader]="true"
+            [suppressDragLeaveHidesColumns]="true"
+            >
+          </ag-grid-angular>
+        </div>
+
+        <div style="display: flex; flex-direction: column;">
+
+          <div class="grid-container" *ngIf=" rowStatsData.length > 0">
+            <i class="grid-title">GitHub Repo Stats.</i>
+            <ag-grid-angular
+              style="width: 52vw; height: 300px;"
+              class="ag-theme-quartz"
+              [overlayLoadingTemplate]="'<span>Loading...</span>'"
+              [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+              [columnDefs]="columnStatsDefs"
+              [defaultColDef]="defaultColDef"
+              [rowData]="rowStatsData"
+              (gridReady)="onGridReadyStats($event)"
+              [resetRowDataOnUpdate]="true"
+              rowSelection="multiple"
+              [rowMultiSelectWithClick]="false"
+              [suppressRowClickSelection]="loading"
+              [overlayLoadingTemplate]="'<span>Loading...</span>'"
+              [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+              [enableBrowserTooltips]="true"
+              [pagination]="true"
+              [paginationPageSize]="page_size_repo_stats"
+              (paginationChanged)="getAllOrgRepoStatsByPage($event, 'repo')"
+              [paginationAutoPageSize]="false"
+              [suppressAggFuncInHeader]="true">
+            </ag-grid-angular>
+          </div>
+
+          <div class="grid-container" *ngIf="rowCommitData.length > 0">
+          <i class="grid-title">Commits</i>
+            <ag-grid-angular
+              style="width: 52vw; height: 300px;"
+              class="ag-theme-quartz"
+              [overlayLoadingTemplate]="'<span>Loading...</span>'"
+              [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+              [columnDefs]="columnCommitDefs"
+              [defaultColDef]="defaultColDef"
+              [rowData]="rowCommitData"
+              (gridReady)="onGridReadyStats($event)"
+              [resetRowDataOnUpdate]="true"
+              rowSelection="multiple"
+              [rowMultiSelectWithClick]="false"
+              [suppressRowClickSelection]="loading"
+              [overlayLoadingTemplate]="'<span>Loading...</span>'"
+              [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+              [enableBrowserTooltips]="true"
+              [pagination]="true"
+              [paginationPageSize]="page_size_repo_stats"
+              (paginationChanged)="getAllOrgRepoStatsByPage($event, 'commit')"
+              [paginationAutoPageSize]="false"
+              [suppressAggFuncInHeader]="true">
+            </ag-grid-angular>
+          </div>
+
+          <div class="grid-container" *ngIf="rowPRData.length > 0">
+          <i class="grid-title">Pull Request</i>
+
+            <ag-grid-angular
+              style="width: 52vw; height: 300px;"
+              class="ag-theme-quartz"
+              [overlayLoadingTemplate]="'<span>Loading...</span>'"
+              [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+              [columnDefs]="columnPRDefs"
+              [defaultColDef]="defaultColDef"
+              [rowData]="rowPRData"
+              (gridReady)="onGridReadyStats($event)"
+              [resetRowDataOnUpdate]="true"
+              rowSelection="multiple"
+              [rowMultiSelectWithClick]="false"
+              [suppressRowClickSelection]="loading"
+              [overlayLoadingTemplate]="'<span>Loading...</span>'"
+              [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+              [enableBrowserTooltips]="true"
+              [pagination]="true"
+              [paginationPageSize]="page_size_repo_stats"
+              (paginationChanged)="getAllOrgRepoStatsByPage($event, 'pr')"
+              [paginationAutoPageSize]="false"
+              [suppressAggFuncInHeader]="true">
+            </ag-grid-angular>
+          </div>
+
+          <div class="grid-container" *ngIf="rowIssueData.length > 0">
+          <i class="grid-title">Issues</i>
+           <ag-grid-angular
+              style="width: 52vw; height: 300px;"
+              class="ag-theme-quartz"
+              [overlayLoadingTemplate]="'<span>Loading...</span>'"
+              [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+              [columnDefs]="columnIssueDefs"
+              [defaultColDef]="defaultColDef"
+              [rowData]="rowIssueData"
+              (gridReady)="onGridReadyStats($event)"
+              [resetRowDataOnUpdate]="true"
+              rowSelection="multiple"
+              [rowMultiSelectWithClick]="false"
+              [suppressRowClickSelection]="loading"
+              [overlayLoadingTemplate]="'<span>Loading...</span>'"
+              [overlayNoRowsTemplate]="'<span>No rows to display</span>'"
+              [enableBrowserTooltips]="true"
+              [pagination]="true"
+              [paginationPageSize]="page_size_repo_stats"
+              (paginationChanged)="getAllOrgRepoStatsByPage($event, 'issue')"
+              [paginationAutoPageSize]="false"
+              [suppressAggFuncInHeader]="true">
+            </ag-grid-angular>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </mat-panel-description>
+
+  </mat-expansion-panel>
+</mat-accordion>
+
+
+

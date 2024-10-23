@@ -1,0 +1,168 @@
+:host {
+  // the styles below were moved from the .sidenav class in app.component.scss
+  height: 100vh;
+  // width: var(--sidenav-width);
+
+  width: var(--sidenav-collapsed-width);
+
+  &.is-expanded {
+    width: var(--sidenav-width);
+  }
+
+  box-sizing: border-box;
+
+  // makes the sidenav stay in place, even when content is scrollable
+  position: sticky;
+  top: 0;
+
+
+  background-color: rgb(237, 241, 243);
+  transition: width 300ms cubic-bezier(.02,.68,.63,.98)
+}
+
+/* src/app/sidebar/sidebar.component.scss */
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 240px;
+  background-color: #1e1e2d;
+  color: #fff;
+}
+
+.mat-icon {
+  color: #fff;
+}
+
+.mat-list-item {
+  padding: 10px;
+}
+
+.sidenav-content {
+  padding: 20px;
+}
+
+.resize-handle {
+  height: 100%;
+  background-color: rgb(165, 165, 165);
+  width: 2px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: ew-resize;
+  // these prevent text selection while dragging
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  transition: background-color 0.2s ease-out, width 0.2s ease-out;
+
+  &:hover {
+    width: 3px;
+    background-color: rgb(93, 159, 235);
+  }
+}
+
+// buffer to make it easier to grab the resize handle
+.resize-handle::after {
+  content: "";
+  display: block;
+  height: 100%;
+  width: 24px;
+  position: absolute;
+  right: -12px;
+  z-index: 1;
+}
+
+.resize-handle.resizing::after {
+  width: 100px;
+  right: calc(-100px / 2);
+}
+// .toggle-button {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   $size: 25px;
+//   width: $size;
+//   height: $size;
+//   margin: 0;
+//   padding: 0;
+//   position: absolute;
+//   top: 48px;
+//   right: calc($size / -2) - 2px;
+//   border: 1px solid gray;
+//   border-radius: 50%;
+//   background-color: white;
+//   cursor: pointer;
+
+//   &:hover {
+//     border: 2px solid rgb(36, 82, 231);
+//   }
+
+//   &.is-flipped {
+//     transform: rotate(-180deg);
+//   }
+
+//   mat-icon {
+//     font-size: 1.5em;
+//     width: fit-content;
+//     height: fit-content;
+//   }
+// }
+
+
+.toggle-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  $size: 25px;
+  width: $size;
+  height: $size;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 48px;
+
+  // the -2px is to get the alignment just right *chefs kiss*
+  right: calc($size / -2) - 2px;
+
+  border: 1px solid gray;
+  border-radius: 50%;
+  background-color: white;
+  cursor: pointer;
+
+  &:hover {
+    border: 2px solid rgb(36, 82, 231);
+  }
+
+  &.is-flipped {
+    transform: rotate(-180deg);
+  }
+
+  mat-icon {
+    font-size: 1.5em;
+    width: fit-content;
+    height: fit-content;
+  }
+}
+
+
+.sidenav-body-container {
+  overflow-y: auto;
+
+  height: 100%;
+  margin-top: 2rem;
+
+  padding: 16px;
+
+  box-sizing: border-box;
+}
+
+.sidenav-body {
+  width: 100%;
+
+  overflow-x: hidden;
+}
